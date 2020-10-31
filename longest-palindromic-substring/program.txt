@@ -1,0 +1,80 @@
+public class Solution {
+    public string LongestPalindrome(string s) {
+       if(s == "")
+       {
+           return "";
+       }
+            var dp = new int[s.Length, s.Length];
+            var dpbooll = new Boolean[s.Length, s.Length];
+            init(dp , dpbooll);
+            
+            for (int i = s.Length - 1; i >= 0; i--)
+            {
+                for (int j = i + 1 ; j <= s.Length-1; j++)
+                {
+                    if (s[i] == s[j])
+                    {
+                        dp[i, j] = dp[i + 1, j - 1] + 2;
+                        if (dpbooll[i +1 , j -1] == true)
+                        {
+                            dpbooll[i, j] = true;
+                        }
+                        else
+                        {
+                            dpbooll[i, j] = false;
+                        }
+                    }
+                    else
+                    {
+                        dp[i, j] = dp[i, j - 1] > dp[i + 1, j] ? dp[i, j - 1] : dp[i + 1, j];
+                        dpbooll[i, j] = false;
+                    }
+                }
+            }
+
+            int k = int.MinValue;
+            int start = -1;
+            int end = -1;
+            for ( int i = s.Length - 1; i >= 0; i-- )
+            {
+                for ( int j = i ; j <= s.Length - 1; j++ )
+                {
+                    if (k < dp[i, j] && dpbooll[i,j] == true)
+                    {
+                        k = dp[i, j];
+                        start = i;
+                        end = j;
+                    }
+                }
+            }
+
+            return s.Substring(start, end - start + 1);
+}
+    private  void initbool(bool[,] dp)
+        {
+            for (int i = 0; i < dp.GetLength(0); i++)
+            {
+                for (int j = 0; j < dp.GetLength(1); j++)
+                {
+                   
+                        dp[i, j] = true;
+                    
+                }
+            }
+        }
+  private void init(int[,] dp , bool[,] dpbool)
+        {
+            for (int i = 0; i < dp.GetLength(0); i++)
+            {
+                for (int j = 0; j < dp.GetLength(1); j++)
+                {
+                    dpbool[i, j] = true;
+                    if (i == j)
+                    {
+                        dp[i, j] = 1;
+                    }
+                }
+            }
+        }
+    
+}
